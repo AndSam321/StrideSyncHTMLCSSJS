@@ -97,10 +97,24 @@ document
 
     audioFeatures.forEach((feature, index) => {
       const song = songs[index];
+
+      // Create a list item
       const li = document.createElement("li");
-      li.textContent = `${song.name} by ${song.artists
+
+      // For Each song, create an anchor element
+      const a = document.createElement("a");
+      a.textContent = `${song.name} by ${song.artists
         .map((artist) => artist.name)
         .join(", ")} - Tempo: ${feature.tempo}`;
+
+      // Set the href to Spotify's track URL
+      a.href = song.external_urls.spotify;
+      a.target = "_blank"; // Opens in a new tab
+
+      // Append element to the list of songs
+      li.appendChild(a);
+
+      // Append the list item to the song list
       songList.appendChild(li);
     });
   });

@@ -1,8 +1,6 @@
 const clientId = "e91849cdad7b49eb8fb76ea40b4950ba";
 const redirectUri = "http://127.0.0.1:5500"; // Spotify redirect URI after authentication
 let accessToken = ""; // Store the access token here after authentication
-
-// Function to calculate the estimated BPM
 function calculateBpm(height, speed) {
   const strideLength = height * 0.413; // Average stride length in meters (conversion factor for inches)
   const speedInMetersPerMinute = (speed * 1609.34) / 60;
@@ -133,3 +131,9 @@ if (!accessToken) {
 }
 
 console.log("Access Token:", accessToken); // Check if it's being set before API calls
+
+document.addEventListener("DOMContentLoaded", function () {
+  const loginBtn = document.getElementById("login-btn");
+  const logoutBtn = document.getElementById("logout-btn");
+  let isLoggedIn = false;
+});

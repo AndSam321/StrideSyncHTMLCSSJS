@@ -5,18 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .container {
+        text-align: center;
+      }
+
+      #login-button {
+        background-color: #1db954;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #login-button:hover {
+        background-color: #1ed760;
+      }
+    </style>
   </head>
   <body>
-    <div class="container" style="margin-top: 80px">
-      <h1>Login</h1>
-      <form id="login-form" onsubmit="handleLogin(event)">
-        <label for="username">Username:</label>
-        <input type="text" id="username" required />
-        <label for="password">Password:</label>
-        <input type="password" id="password" required />
-        <button type="submit">Login</button>
-      </form>
+    <div class="navbar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="social.html">Social</a></li>
+        <li><a href="pages.html">Pages</a></li>
+      </ul>
     </div>
-    <script src="script.js"></script>
+    <div class="container" style="margin-top: 80px">
+      <h1>Login with Spotify Below:</h1>
+      <button id="login-button">
+        Click here to login with your Spotify Account
+      </button>
+    </div>
+    <script>
+      const clientId = "e91849cdad7b49eb8fb76ea40b4950ba";
+      const redirectUri = "http://127.0.0.1:5500/profile.html"; // Update to your profile page URL
+      const scopes = "user-top-read";
+
+      document.getElementById("login-button").addEventListener("click", () => {
+        const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+          redirectUri
+        )}&scope=${encodeURIComponent(scopes)}&response_type=token`;
+        window.location.href = authUrl;
+      });
+    </script>
   </body>
 </html>

@@ -115,9 +115,23 @@ li a:hover {
   margin-right: 20px;
 }
 
+.login-btn {
+  background-color: #007bff; /* Button color */
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
-
   /* .navbar{
     width: 20%;
   } */

@@ -70,7 +70,8 @@ document
 
 // Calculating BPM
 function calculateBpm(height, speed) {
-  return Math.round((speed / height) * 1000); // Change formula here if needed
+
+  return Math.round((1056 * speed) / (height / 2) * (1.49 + (-0.101 * speed))); // Change formula here if needed
 }
 
 // Fetch Spotify Access Token

@@ -1,0 +1,146 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f4f8;
+  background: linear-gradient(to right, #11111b, #39395f);
+  margin: 0;
+  padding: 20px;
+  color: #333; /* Improved readability */
+}
+
+.container {
+  max-width: 600px;
+  margin: 60px auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  background: linear-gradient(90deg, #af40ff, #5b42f3 50%, #00ddeb);
+  /* -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 10px 0 5px;
+  font-weight: bold;
+  font-size: 1em;
+  color: #333;
+}
+
+input,
+#genre { /* Combined styling for inputs and dropdown */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background-image: linear-gradient(90deg, #af40ff, #5b42f3 50%, #00ddeb);
+  color: white;
+  border: none;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: rgba(151, 65, 252, 0.8) 0px 15px 30px -10px;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: 0.8;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+li a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+li a:hover {
+  text-decoration: underline;
+}
+
+/* Navigation bar styling */
+.navbar {
+  background-color: transparent;
+  padding: 1rem;
+  position: relative;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.navbar ul li {
+  margin-right: 20px;
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    padding: 15px;
+  }
+
+  input,
+  button {
+    padding: 12px;
+    font-size: 1em;
+  }
+
+  button {
+    font-size: 1.1em;
+  }
+}

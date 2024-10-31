@@ -4,6 +4,7 @@ body {
   background: linear-gradient(to right, #11111b, #39395f);
   margin: 0;
   padding: 20px;
+  color: #333; /* Improved readability */
 }
 
 .container {
@@ -18,8 +19,11 @@ body {
 
 h1 {
   text-align: center;
-  color: #333;
-  color: linear-gradient(90deg, #af40ff, #5b42f3 50%, #00ddeb);
+  background: linear-gradient(90deg, #af40ff, #5b42f3 50%, #00ddeb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
 form {
@@ -30,28 +34,20 @@ form {
 label {
   margin: 10px 0 5px;
   font-weight: bold;
+  font-size: 1em;
+  color: #333;
 }
 
-input {
+input,
+#genre { /* Combined styling for inputs and dropdown */
   padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
+  font-size: 1em;
 }
-
-/* button {
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #28a745;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  width: 100%;
-  box-sizing: border-box;
-} */
 
 button {
   display: inline-block;
@@ -68,9 +64,8 @@ button {
 }
 
 button:hover {
-  background-color: #218838;
   transform: translateY(-2px);
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 ul {
@@ -86,12 +81,14 @@ li {
 li a {
   text-decoration: none;
   color: #007bff;
+  font-weight: bold;
 }
 
 li a:hover {
   text-decoration: underline;
 }
-/* navigation bar */
+
+/* Navigation bar styling */
 .navbar {
   background-color: transparent;
   padding: 1rem;
@@ -113,11 +110,10 @@ li a:hover {
 
 .navbar ul li {
   margin-right: 20px;
-  /* border-bottom: none; */
 }
 
 .login-btn {
-  background-color: #007bff; /* Button color */
+  background-color: #007bff;
   color: white;
   padding: 10px 20px;
   text-decoration: none;
@@ -133,21 +129,16 @@ li a:hover {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  /* .navbar{
-    width: 20%;
-  } */
-
-  /* .navbar ul {
+  .navbar ul {
     flex-direction: column;
     align-items: center;
-  } */
+  }
 
-  /* .navbar ul li {
+  .navbar ul li {
     margin: 10px 0;
-  } */
+  }
 }
 
-/* Responsive Design */
 @media (max-width: 600px) {
   .container {
     padding: 15px;
@@ -156,10 +147,10 @@ li a:hover {
   input,
   button {
     padding: 12px;
-    font-size: 14px;
+    font-size: 1em;
   }
 
   button {
-    font-size: 18px;
+    font-size: 1.1em;
   }
 }

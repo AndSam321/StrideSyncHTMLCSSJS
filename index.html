@@ -12,9 +12,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="profile.html">Profile</a></li>
         <li><a href="social.html">Social</a></li>
-        <!-- <li><a href="pages.html">Pages</a></li> -->
         <li><a href="login.html" class="login-btn">Login</a></li>
-        <!-- Can add more buttons for the navbar here as needed. -->
       </ul>
     </div>
     <div class="container">
@@ -30,15 +28,7 @@
         <input type="number" id="speed" required placeholder="mph" />
 
         <label for="genre">Genre:</label>
-        <select
-          id="genre"
-          style="
-            border-radius: 8px;
-            margin-bottom: 15px;
-            padding: 10px;
-            width: 150px;
-          "
-        >
+        <select id="genre">
           <option value="any">Any</option>
           <option value="pop">Pop</option>
           <option value="hiphop">Hip-Hop</option>
@@ -49,7 +39,21 @@
       </form>
 
       <h2>Your BPM: <span id="bpm-display">0</span></h2>
-      <ul id="recommended-songs"></ul>
+
+      <!-- Updated table structure for displaying songs -->
+      <table id="recommended-songs-table">
+        <thead>
+          <tr>
+            <th>Album Art</th>
+            <th>Song</th>
+            <th>Artist</th>
+            <th>Tempo (BPM)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows with song information will be dynamically inserted here -->
+        </tbody>
+      </table>
     </div>
 
     <script src="script.js"></script>

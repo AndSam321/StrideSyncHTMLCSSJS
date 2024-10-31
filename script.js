@@ -10,6 +10,17 @@ document
     const speed = document.getElementById("speed").value;
     const genre = document.getElementById("genre").value;
 
+    // Input validation
+    if (!heightFeet || !heightInches || !speed || !genre) {
+      alert("Please fill out all fields.");
+      return;
+    }
+    
+    if (isNaN(heightFeet) || isNaN(heightInches) || isNaN(speed)) {
+      alert("Height and speed must be numeric values.");
+      return;
+    }
+
     // Calculating the Total Height to Inches to work easier with
     const totalHeight = parseInt(heightFeet) * 12 + parseInt(heightInches);
 
@@ -21,20 +32,20 @@ document
     // Spotify Access Token
     const accessToken = await getSpotifyAccessToken();
     if (!accessToken) {
-      console.error("Failed to retrieve access token.");
+      alert("Failed to retrieve access token. Please try again later.");
       return;
     }
 
     // Song Recommendation function
     const songs = await getSongRecommendations(bpm, genre, accessToken);
     if (!songs.length) {
-      console.error("No songs were found.");
+      alert("No songs found matching your preferences.");
       return;
     }
 
-    // Displaying the songs, mapping each ID to the song
-    const songList = document.getElementById("recommended-songs");
-    songList.innerHTML = "";
+    // Displaying the songs in the table
+    const songTableBody = document.getElementById("recommended-songs-table").querySelector("tbody");
+    songTableBody.innerHTML = ""; // Clear existing table rows
 
     const trackIds = songs.map((song) => song.id);
     const audioFeatures = await fetchAudioFeatures(trackIds, accessToken);
@@ -42,36 +53,50 @@ document
     audioFeatures.forEach((feature, index) => {
       const song = songs[index];
 
-      // Creating the List for the songs
-      const li = document.createElement("li");
+      // Creating a new row for each song
+      const row = document.createElement("tr");
 
-      // Displaying the image of the album for each song
+      // Album Art Cell
+      const albumArtCell = document.createElement("td");
       const img = document.createElement("img");
       img.src = song.album.images[0].url; // Use the first image from the album's images
       img.alt = `${song.name} Album Art`;
-      img.style.width = "50px"; // Set width for the image
-      img.style.height = "50px"; // Set height for the image
-      img.style.marginRight = "10px";
+      img.style.width = "50px";
+      img.style.height = "50px";
+      albumArtCell.appendChild(img);
 
-      // Anchor Element for each song
-      const a = document.createElement("a");
-      a.textContent = `${song.name} by ${song.artists
-        .map((artist) => artist.name)
-        .join(", ")} - Tempo: ${feature.tempo}`;
-      a.href = song.external_urls.spotify;
-      a.target = "_blank"; // Opens in a new tab
+      // Song Name and Artist Cell
+      const songCell = document.createElement("td");
+      const songLink = document.createElement("a");
+      songLink.textContent = song.name;
+      songLink.href = song.external_urls.spotify;
+      songLink.target = "_blank"; // Opens in a new tab
+      songLink.style.color = "#1DB954"; // Spotify green color for link
+      songLink.style.textDecoration = "none";
+      songCell.appendChild(songLink);
 
-      // Append the image and anchor element to the list item
-      li.appendChild(img); // Add image to list item
-      li.appendChild(a); // Add song link to list item
-      songList.appendChild(li);
+      // Artist Cell
+      const artistCell = document.createElement("td");
+      artistCell.textContent = song.artists.map((artist) => artist.name).join(", ");
+
+      // Tempo Cell
+      const tempoCell = document.createElement("td");
+      tempoCell.textContent = feature.tempo.toFixed(1); // Rounding to 1 decimal point
+
+      // Append all cells to the row
+      row.appendChild(albumArtCell);
+      row.appendChild(songCell);
+      row.appendChild(artistCell);
+      row.appendChild(tempoCell);
+
+      // Append the row to the table body
+      songTableBody.appendChild(row);
     });
   });
 
 // Calculating BPM
 function calculateBpm(height, speed) {
-
-  return Math.round((1056 * speed) / (height / 2) * (1.49 + (-0.101 * speed))); // Change formula here if needed
+  return Math.round((1056 * speed) / (height / 2) * (1.49 + (-0.101 * speed))); // Adjusted formula if needed
 }
 
 // Fetch Spotify Access Token
@@ -103,9 +128,7 @@ async function getSpotifyAccessToken() {
 
 // Using Spotify API
 async function getSongRecommendations(bpm, genre, accessToken) {
-  console.log(
-    `Fetching recommendations for BPM: ${bpm} and Genre: ${genre}...`
-  );
+  console.log(`Fetching recommendations for BPM: ${bpm} and Genre: ${genre}...`);
   const url = `https://api.spotify.com/v1/recommendations?seed_genres=${genre}&target_tempo=${bpm}&limit=10`;
 
   const response = await fetch(url, {
@@ -129,9 +152,7 @@ async function getSongRecommendations(bpm, genre, accessToken) {
 // Audio Features of the songs to fetch the Tempo
 async function fetchAudioFeatures(trackIds, accessToken) {
   console.log("Fetching audio features for track IDs:", trackIds);
-  const url = `https://api.spotify.com/v1/audio-features?ids=${trackIds.join(
-    ","
-  )}`;
+  const url = `https://api.spotify.com/v1/audio-features?ids=${trackIds.join(",")}`;
 
   const response = await fetch(url, {
     headers: {

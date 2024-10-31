@@ -129,13 +129,13 @@ li a:hover {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+  /* Removed the rule that sets flex-direction: column */
   .navbar ul {
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
   }
 
   .navbar ul li {
-    margin: 10px 0;
+    margin: 10px;
   }
 }
 

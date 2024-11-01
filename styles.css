@@ -39,7 +39,8 @@ label {
 }
 
 input,
-#genre { /* Combined styling for inputs and dropdown */
+#genre {
+  /* Combined styling for inputs and dropdown */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -121,12 +122,12 @@ li a:hover {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left: auto;
 }
 
 .login-btn:hover {
   background-color: #0056b3;
 }
-
 
 @media (max-width: 600px) {
   .container {

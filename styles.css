@@ -20,8 +20,8 @@ body {
 h1 {
   text-align: center;
   background: linear-gradient(90deg, #af40ff, #5b42f3 50%, #00ddeb);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
   font-size: 2em;
   margin-bottom: 20px;
 }
@@ -39,7 +39,8 @@ label {
 }
 
 input,
-#genre { /* Combined styling for inputs and dropdown */
+#genre {
+  /* Combined styling for inputs and dropdown */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -121,22 +122,11 @@ li a:hover {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-left: auto;
 }
 
 .login-btn:hover {
   background-color: #0056b3;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .navbar ul {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .navbar ul li {
-    margin: 10px 0;
-  }
 }
 
 @media (max-width: 600px) {

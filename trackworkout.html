@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Welcome to Workout Page</h1>
+
+    <script>
+      window.onload = function () {
+        const hash = window.location.hash;
+        const accessToken = new URLSearchParams(hash.substring(1)).get(
+          "access_token"
+        );
+
+        if (accessToken) {
+          sessionStorage.setItem("spotifyAccessToken", accessToken);
+          sessionStorage.setItem("loggedIn", "true");
+          window.location.hash = "";
+        } else {
+          const isLoggedIn = sessionStorage.getItem("loggedIn");
+
+          if (isLoggedIn !== "true") {
+            window.location.href = "login.html";
+          } else {
+            console.log("User is already logged in!");
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

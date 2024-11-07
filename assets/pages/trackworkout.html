@@ -3,10 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Start a Workout</title>
+    <link rel="stylesheet" href="/assets/css/index.css" />
   </head>
   <body>
+    <div class="navbar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="social.html">Social</a></li>
+        <!-- <li><a href="pages.html">Pages</a></li> -->
+        <!-- Can add more buttons for the navbar here as needed. -->
+      </ul>
+    </div>
     <h1>Welcome to Workout Page</h1>
+    <div id="workout-container">
+      <div id="timer">00:00:00</div>
+      <button id="start-button" onclick="startTimer()">Start</button>
+      <button id="pause-button" onclick="pauseTimer()">Pause</button>
+      <button id="reset-button" onclick="resetTimer()">Reset</button>
+    </div>
 
     <script>
       window.onload = function () {
@@ -29,6 +45,27 @@
           }
         }
       };
+
+      let timerInterval, startTime;
+
+      function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          document.getElementById("timer").textContent = new Date(elapsed)
+            .toISOString()
+            .substr(11, 8);
+        }, 1000);
+      }
+
+      function pauseTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        document.getElementById("timer").textContent = "00:00:00";
+      }
     </script>
   </body>
 </html>

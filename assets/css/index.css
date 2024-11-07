@@ -1,3 +1,7 @@
+/* ========================== 
+    BASE INDEX PAGE STYLING
+========================== */
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f4f8;
@@ -90,7 +94,9 @@ li a:hover {
   text-decoration: underline;
 }
 
-/* Navigation bar styling */
+/* ========================== 
+    NAVBAR STYLING
+========================== */
 .navbar {
   background-color: transparent;
   /* padding: 1rem; */
@@ -114,8 +120,45 @@ li a:hover {
 .navbar ul li {
   margin-right: 20px;
 }
+/* ========================== 
+    WORKOUT TRACKING SECTION
+========================== */
+#timer {
+  display: flex;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fbfbfb;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+#workout-container {
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+#start-button {
+  color: #28a745;
+  background-image: linear-gradient(90deg, #1bbf41, #83e44f 50%, #78e62e);
+  color: white;
+}
 
+#pause-button {
+  color: #28a745;
+  background-image: linear-gradient(90deg, #070707, #090909 50%, #030303);
+  color: white;
+}
+
+#reset-button {
+  color: #28a745;
+  background-image: linear-gradient(90deg, #f52222, #f12222 50%, #f70909);
+  color: white;
+}
+
+/* ========================== 
+    RESPONSIVE SECTION
+========================== */
 @media (max-width: 600px) {
   .container {
     padding: 15px;

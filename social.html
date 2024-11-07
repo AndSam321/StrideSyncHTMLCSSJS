@@ -4,22 +4,55 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Social</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="social.css" />
   </head>
   <body>
-    <div class="navbar">
-      <ul>
+    <div class="sidebar">
+      <h2>StrideSync</h2>
+      <ul class="menu">
         <li><a href="index.html">Home</a></li>
         <li><a href="profile.html">Profile</a></li>
-        <li><a href="social.html">Social</a></li>
-        <!-- <li><a href="pages.html">Pages</a></li> -->
-        <!-- Can add more buttons for the navbar here as needed. -->
+        <li><a href="social.html">Socialgit </a></li>
       </ul>
     </div>
-    <div class="container" style="margin-top: 80px">
-      <h1>Social Page</h1>
-      <div id="social-message"></div>
+
+    <div class="content">
+      <header class="profile-header">
+        <div class="profile-banner">
+          <img src="images/profile-banner.jpg" alt="Profile Banner" />
+          <div class="profile-info">
+            <img src="images/profile-pic.jpg" alt="Profile Picture" class="profile-pic" />
+            <h1>Andrew Samountry</h1>
+            <p>@leftsockSupremacy</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="card">
+          <h2>Introduction</h2>
+          <p>Product Designer at CompanyX</p>
+          <p>Live in City, Country</p>
+          <p>Player Name: Your Name</p>
+        </div>
+
+        <div class="card">
+          <h2>Activity Feed</h2>
+          <p><strong>January 1</strong> - Winter Wonderland</p>
+          <p>When the bass drops, so do my problems.</p>
+          <!-- Add more activity posts here -->
+        </div>
+
+        <div class="card">
+          <h2>Others in the community</h2>
+          <ul class="contact-list">
+            <li>RythmMaster88</li>
+            <li>KungFuRunner</li>
+            <li>LiveLaughTacos</li>
+            <!-- Add more contacts here -->
+          </ul>
+        </div>
+      </main>
     </div>
-    <script src="script.js"></script>
   </body>
 </html>

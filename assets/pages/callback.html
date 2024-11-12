@@ -11,8 +11,14 @@
         const authorizationCode = params.get("code");
 
         if (authorizationCode) {
-            fetch(`http://localhost:5500/getSpotifyToken?code=${authorizationCode}`)
-                .then(response => response.json())
+            fetch(`http://127.0.0.1:3000/getSpotifyToken?code=${authorizationCode}`)
+            .then(response => {
+                console.log("Raw response:", response); // Log the raw response
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+                })
                 .then(data => {
                     if (data.access_token) {
                         // Store the access token and redirect back to the main app

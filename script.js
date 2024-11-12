@@ -1,3 +1,7 @@
+//GLOBAL VARIABLES *NOT RECOMMENDED*
+let recommendedSongs = [];
+
+
 // Accessing the DOM
 document
   .getElementById("run-form")
@@ -36,8 +40,9 @@ document
       return;
     }
 
+
     // Song Recommendation function
-    const songs = await getSongRecommendations(bpm, genre, accessToken);
+    const songs = await getSongRecommendations(bpm, genre, clientCedentialsToken);
     if (!songs.length) {
       alert("No songs found matching your preferences.");
       return;
@@ -99,8 +104,18 @@ function calculateBpm(height, speed) {
   return Math.round((2 * (speed / height) * 1056 * 105) / 88); // Change formula here if needed
 }
 
-// Fetch Spotify Access Token
 async function getSpotifyAccessToken() {
+  const token = localStorage.getItem("spotifyAccessToken");
+  if (token) return token;
+
+  alert("Please log in to Spotify.");
+  return null;
+}
+
+
+
+// Fetch Spotify Access Token
+async function fetchClientCredentialsToken() {
   const clientId = "e91849cdad7b49eb8fb76ea40b4950ba";
   const clientSecret = "c121e3fa80274a0b906aa8eb4af0a6e8";
   const encodedCredentials = btoa(`${clientId}:${clientSecret}`);
@@ -125,6 +140,8 @@ async function getSpotifyAccessToken() {
 
   return data.access_token;
 }
+
+
 
 // Using Spotify API
 async function getSongRecommendations(bpm, genre, accessToken) {
@@ -171,3 +188,80 @@ async function fetchAudioFeatures(trackIds, accessToken) {
 
   return data.audio_features;
 }
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("create-playlist-button").addEventListener("click", createAndRedirectPlaylist);
+
+  async function createAndRedirectPlaylist() {
+      const accessToken = await getSpotifyAccessToken();
+      if (!accessToken) {
+          alert("Failed to retrieve access token. Please try again later.");
+          return;
+      }
+
+      const userId = await getSpotifyUserId(accessToken);
+      if (!userId) {
+          alert("Failed to retrieve Spotify user ID.");
+          return;
+      }
+
+      const playlistName = "Your BPM Matched Playlist";
+      const playlistId = await createSpotifyPlaylist(accessToken, userId, playlistName);
+      if (!playlistId) {
+          alert("Failed to create playlist.");
+          return;
+      }
+
+      const trackUris = recommendedSongs.map(song => song.uri);
+      await addTracksToPlaylist(accessToken, playlistId, trackUris);
+
+      window.location.href = `https://open.spotify.com/playlist/${playlistId}`;
+  }
+
+  // Retrieve Spotify user ID
+  async function getSpotifyUserId(accessToken) {
+      const response = await fetch("https://api.spotify.com/v1/me", {
+          headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      const data = await response.json();
+      return response.status === 200 ? data.id : null;
+  }
+
+  // Create a new Spotify playlist
+  async function createSpotifyPlaylist(accessToken, userId, playlistName) {
+      const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+          method: "POST",
+          headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              name: playlistName,
+              description: "Playlist generated based on your BPM preference",
+              public: true
+          })
+      });
+      const data = await response.json();
+      return response.status === 201 ? data.id : null;
+  }
+
+  // Add tracks to the playlist
+  async function addTracksToPlaylist(accessToken, playlistId, trackUris) {
+      await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+          method: "POST",
+          headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ uris: trackUris })
+      });
+  }
+});
+
+
+
+
+

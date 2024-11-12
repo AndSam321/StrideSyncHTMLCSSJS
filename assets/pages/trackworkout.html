@@ -18,54 +18,12 @@
     </div>
     <h1>Welcome to Workout Page</h1>
     <div id="workout-container">
-      <div id="timer">00:00:00</div>
-      <button id="start-button" onclick="startTimer()">Start</button>
-      <button id="pause-button" onclick="pauseTimer()">Pause</button>
-      <button id="reset-button" onclick="resetTimer()">Reset</button>
+      <div id="timer">00:00:00:00</div>
+      <button id="start-button" onclick="start()">Start</button>
+      <button id="pause-button" onclick="stop()">Pause</button>
+      <button id="reset-button" onclick="reset()">Reset</button>
     </div>
 
-    <script>
-      window.onload = function () {
-        const hash = window.location.hash;
-        const accessToken = new URLSearchParams(hash.substring(1)).get(
-          "access_token"
-        );
-
-        if (accessToken) {
-          sessionStorage.setItem("spotifyAccessToken", accessToken);
-          sessionStorage.setItem("loggedIn", "true");
-          window.location.hash = "";
-        } else {
-          const isLoggedIn = sessionStorage.getItem("loggedIn");
-
-          if (isLoggedIn !== "true") {
-            window.location.href = "login.html";
-          } else {
-            console.log("User is already logged in!");
-          }
-        }
-      };
-
-      let timerInterval, startTime;
-
-      function startTimer() {
-        startTime = Date.now();
-        timerInterval = setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          document.getElementById("timer").textContent = new Date(elapsed)
-            .toISOString()
-            .substr(11, 8);
-        }, 1000);
-      }
-
-      function pauseTimer() {
-        clearInterval(timerInterval);
-      }
-
-      function resetTimer() {
-        clearInterval(timerInterval);
-        document.getElementById("timer").textContent = "00:00:00";
-      }
-    </script>
+    <script src="/trackworkout.js"></script>
   </body>
 </html>

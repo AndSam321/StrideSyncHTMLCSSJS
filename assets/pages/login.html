@@ -43,21 +43,22 @@
     </div>
     <script>
       const clientId = "401d63283cf74348b61eb45d0531a011";
-      const redirectUri = "http://127.0.0.1:5500/assets/pages/callback.html"; // Update to your profile page URL
+      const redirectUri = "http://127.0.0.1:5501/assets/pages/profile.html"; // Update to your profile page URL
       // const scopes = "user-top-read";
       const scopes = [
-      "user-read-private",
-      "user-read-email",
-      "playlist-modify-public",
-      "playlist-modify-private"
+        "user-read-private",
+        "user-read-email",
+        "playlist-modify-public",
+        "playlist-modify-private",
       ];
-
 
       document.getElementById("login-button").addEventListener("click", () => {
         // const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
         //   redirectUri
         // )}&scope=${encodeURIComponent(scopes)}&response_type=token`;
-        const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${scopes.join("%20")}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+        const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${scopes.join(
+          "%20"
+        )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
         window.location.href = authUrl;
       });
     </script>

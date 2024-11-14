@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile</title>
-    <link rel="stylesheet" href="/assets/css/index.css" />
+    <link rel="stylesheet" href="/css/index.css" />
   </head>
   <body>
     <div class="navbar">
@@ -13,8 +13,6 @@
         <li><a href="trackworkout.html">Start a Workout</a></li>
         <li><a href="profile.html">Profile</a></li>
         <li><a href="social.html">Social</a></li>
-        <!-- <li><a href="pages.html">Pages</a></li> -->
-        <!-- Can add more buttons for the navbar here as needed. -->
       </ul>
     </div>
     <div class="container" style="margin-top: 20px">
@@ -22,7 +20,11 @@
       <div id="profile-message"></div>
 
       <h2>Favorite Songs</h2>
-      <ul id="favorite-songs"></ul>
+      <ul id="favorite-songs">
+        <li>Song 1 - Artist 1</li>
+        <li>Song 2 - Artist 2</li>
+        <li>Song 3 - Artist 3</li>
+      </ul>
 
       <h2>Distance Run</h2>
       <p id="distance-run">
@@ -39,123 +41,49 @@
       <ul id="top-artists"></ul>
     </div>
     <script>
-      window.onload = function () {
-        const hash = window.location.hash;
-        const accessToken = new URLSearchParams(hash.substring(1)).get(
-          "access_token"
-        );
-
-        if (accessToken) {
-          sessionStorage.setItem("spotifyAccessToken", accessToken);
-          sessionStorage.setItem("loggedIn", "true");
-          window.location.hash = ""; // Clear the hash in the URL in order to make new request
-          loadProfileData();
-        } else {
-          const isLoggedIn = sessionStorage.getItem("loggedIn");
-          if (isLoggedIn !== "true") {
-            window.location.href = "login.html";
-          } else {
-            loadProfileData();
-          }
-        }
-      };
-
+      // Fetch Profile Data from the Backend
       async function loadProfileData() {
-        const accessToken = sessionStorage.getItem("spotifyAccessToken");
-
-        if (!accessToken) {
-          alert("You need to login to Spotify.");
-          return;
-        }
-
         try {
-          // Profile Data
-          const userProfileResponse = await fetch(
-            "https://api.spotify.com/v1/me",
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          if (!userProfileResponse.ok) {
-            throw new Error("Failed to fetch user profile");
+          const profileResponse = await fetch("/api/profile");
+          if (!profileResponse.ok) {
+            throw new Error("Failed to load profile data");
           }
-
-          const userProfileData = await userProfileResponse.json();
-
-          // Taking DisplayName and putting it into new variable
-          const displayName = userProfileData.display_name;
-
-          // Update the profile message with the user's display name
+          const profileData = await profileResponse.json();
           document.getElementById(
             "profile-message"
-          ).innerText = `Welcome to your profile, ${displayName}!`;
+          ).innerText = `Welcome to your profile, ${profileData.display_name}!`;
+        } catch (error) {
+          console.error(error);
+          alert("Error fetching profile data.");
+        }
+      }
 
-          // Can fix this to be dynamic, so users can change this, but good for now.
-          const favoriteSongs = [
-            { name: "Song 1", artist: "Artist 1" },
-            { name: "Song 2", artist: "Artist 2" },
-            { name: "Song 3", artist: "Artist 3" },
-          ];
-
-          const songList = document.getElementById("favorite-songs");
-          songList.innerHTML = "";
-          favoriteSongs.forEach((song) => {
-            const li = document.createElement("li");
-            li.innerText = `${song.name} - ${song.artist}`;
-            songList.appendChild(li);
-          });
-
-          // Set distance ran
-          const distanceRun = 10;
-          document.getElementById("run-distance").innerText = distanceRun;
-
-          // Displaying top artists
-          const topArtists = await fetchTopArtists();
+      // Fetch Top Artists from the Backend
+      async function loadTopArtists() {
+        try {
+          const artistsResponse = await fetch("/api/top-artists");
+          if (!artistsResponse.ok) {
+            throw new Error("Failed to load top artists");
+          }
+          const artists = await artistsResponse.json();
           const artistList = document.getElementById("top-artists");
           artistList.innerHTML = "";
-          if (topArtists) {
-            topArtists.forEach((artist) => {
-              const li = document.createElement("li");
-              li.innerText = artist.name;
-              artistList.appendChild(li);
-            });
-          }
+          artists.forEach((artist) => {
+            const li = document.createElement("li");
+            li.innerText = artist.name;
+            artistList.appendChild(li);
+          });
         } catch (error) {
-          console.error("Error loading profile data:", error);
+          console.error(error);
+          alert("Error fetching top artists.");
         }
       }
 
-      async function fetchTopArtists() {
-        const accessToken = sessionStorage.getItem("spotifyAccessToken");
-
-        if (!accessToken) {
-          alert("You need to login to Spotify to see your top artists.");
-          return;
-        }
-
-        try {
-          const response = await fetch(
-            "https://api.spotify.com/v1/me/top/artists?limit=3",
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error("Failed to fetch top artists");
-          }
-
-          const data = await response.json();
-          return data.items; // Return the list of top artists
-        } catch (error) {
-          console.error("Error fetching top artists:", error);
-        }
-      }
+      // Load Data on Page Load
+      window.onload = function () {
+        loadProfileData();
+        loadTopArtists();
+      };
     </script>
   </body>
 </html>

@@ -22,6 +22,8 @@ app.get("/login", (req, res) => {
     "user-read-playback-state",
     "user-modify-playback-state",
     "user-top-read",
+    "playlist-modify-public",
+    "playlist-modify-private",
   ];
   res.redirect(spotifyApi.createAuthorizeURL(scopes));
 });
@@ -44,6 +46,7 @@ app.get("/callback", async (req, res) => {
 
     console.log("Access token:", accessToken);
     console.log("Refresh token:", refreshToken);
+    console.log("Granted Scopes:", data.body.scope);
 
     // Redirect to the index.html
     res.redirect("/pages/index.html");
@@ -125,6 +128,36 @@ app.get("/api/top-artists", async (req, res) => {
       .json({ error: "Failed to fetch top artists", details: error.message });
   }
 });
+
+app.get("/api/token", async (req, res) => {
+  try {
+      let accessToken = spotifyApi.getAccessToken();
+
+      // Refresh the token if it has expired
+      if (!accessToken) {
+          console.log("Access token expired. Refreshing...");
+          const refreshData = await spotifyApi.refreshAccessToken();
+          accessToken = refreshData.body["access_token"];
+          spotifyApi.setAccessToken(accessToken);
+          console.log("Access token refreshed:", accessToken);
+      }
+
+      res.json({ accessToken });
+  } catch (error) {
+      console.error("Error fetching or refreshing token:", error);
+      res.status(500).json({ error: "Failed to retrieve access token" });
+  }
+});
+
+app.use((req, res, next) => {
+  if (!spotifyApi.getAccessToken() && req.path !== "/login" && req.path !== "/callback") {
+      res.redirect("/login");
+  } else {
+      next();
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);

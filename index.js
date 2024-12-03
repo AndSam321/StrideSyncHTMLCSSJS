@@ -15,6 +15,12 @@ const spotifyApi = new SpotifyWebApi({
 // Static Files
 app.use(express.static(path.join(__dirname, "/assets")));
 
+// Default route redirects to /login
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
+// Login route
 app.get("/login", (req, res) => {
   const scopes = [
     "user-read-private",
@@ -28,6 +34,7 @@ app.get("/login", (req, res) => {
   res.redirect(spotifyApi.createAuthorizeURL(scopes));
 });
 
+// Spotify callback route
 app.get("/callback", async (req, res) => {
   const code = req.query.code;
   if (!code) {
@@ -48,10 +55,10 @@ app.get("/callback", async (req, res) => {
     console.log("Refresh token:", refreshToken);
     console.log("Granted Scopes:", data.body.scope);
 
-    // Redirect to the index.html
+    // Redirect to the main app page
     res.redirect("/pages/index.html");
 
-    // Periodically to avoid expiration
+    // Refresh access token periodically
     setInterval(async () => {
       try {
         const refreshData = await spotifyApi.refreshAccessToken();
@@ -66,31 +73,30 @@ app.get("/callback", async (req, res) => {
   }
 });
 
-app.get("/search", (req, res) => {
-  // Search parameter
+// Search route
+app.get("/search", async (req, res) => {
   const { q } = req.query;
-  spotifyApi
-    .searchTracks(q)
-    .then((searchData) => {
-      // Extract the URI of the first track from the search results
-      const trackUri = searchData.body.tracks.items[0].uri;
-      // Send the track URI back to the client
-      res.send({ uri: trackUri });
-    })
-    .catch((err) => {
-      console.error("Search Error:", err);
-      res.send("Error occurred during search");
-    });
+  try {
+    const searchData = await spotifyApi.searchTracks(q);
+    const trackUri = searchData.body.tracks.items[0].uri;
+    res.send({ uri: trackUri });
+  } catch (err) {
+    console.error("Search Error:", err);
+    res.send("Error occurred during search");
+  }
 });
 
-// Checking if token is set before profile extract
-function ensureAuthenticated(req, res, next) {
-  if (spotifyApi.getAccessToken()) {
-    return next();
+// Middleware to enforce authentication
+app.use((req, res, next) => {
+  const publicPaths = ["/login", "/callback"];
+  if (!spotifyApi.getAccessToken() && !publicPaths.includes(req.path)) {
+    res.redirect("/login");
+  } else {
+    next();
   }
-  res.redirect("/login");
-}
+});
 
+// Fetch user profile
 app.get("/api/profile", async (req, res) => {
   try {
     const userProfileResponse = await spotifyApi.getMe();
@@ -101,9 +107,9 @@ app.get("/api/profile", async (req, res) => {
   }
 });
 
+// Fetch top artists
 app.get("/api/top-artists", async (req, res) => {
   try {
-    console.log("Fetching top artists...");
     if (!spotifyApi.getAccessToken()) {
       console.error("No access token available");
       return res.status(401).json({ error: "Access token missing or expired" });
@@ -112,14 +118,9 @@ app.get("/api/top-artists", async (req, res) => {
     const topArtistsResponse = await spotifyApi.getMyTopArtists({ limit: 3 });
 
     if (!topArtistsResponse.body || !topArtistsResponse.body.items) {
-      console.error("No artists found in the response");
       return res.status(404).json({ error: "No artists found" });
     }
 
-    console.log(
-      "Top artists fetched successfully:",
-      topArtistsResponse.body.items
-    );
     res.json(topArtistsResponse.body.items);
   } catch (error) {
     console.error("Error fetching top artists:", error.message);
@@ -129,36 +130,26 @@ app.get("/api/top-artists", async (req, res) => {
   }
 });
 
+// Fetch or refresh access token
 app.get("/api/token", async (req, res) => {
   try {
-      let accessToken = spotifyApi.getAccessToken();
+    let accessToken = spotifyApi.getAccessToken();
 
-      // Refresh the token if it has expired
-      if (!accessToken) {
-          console.log("Access token expired. Refreshing...");
-          const refreshData = await spotifyApi.refreshAccessToken();
-          accessToken = refreshData.body["access_token"];
-          spotifyApi.setAccessToken(accessToken);
-          console.log("Access token refreshed:", accessToken);
-      }
+    // Refresh the token if it has expired
+    if (!accessToken) {
+      const refreshData = await spotifyApi.refreshAccessToken();
+      accessToken = refreshData.body["access_token"];
+      spotifyApi.setAccessToken(accessToken);
+    }
 
-      res.json({ accessToken });
+    res.json({ accessToken });
   } catch (error) {
-      console.error("Error fetching or refreshing token:", error);
-      res.status(500).json({ error: "Failed to retrieve access token" });
+    console.error("Error fetching or refreshing token:", error);
+    res.status(500).json({ error: "Failed to retrieve access token" });
   }
 });
 
-app.use((req, res, next) => {
-  if (!spotifyApi.getAccessToken() && req.path !== "/login" && req.path !== "/callback") {
-      res.redirect("/login");
-  } else {
-      next();
-  }
-});
-
-
-
+// Start the server
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);
 });
